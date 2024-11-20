@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Blog
+from home.models import Blog
 
 class BlogSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Blog,
-        exclude = ['created_at','updated_at']
+        model = Blog
+        fields = ['uuid','title', 'blog_text', 'main_image', 'created_at', 'updated_at']
+
