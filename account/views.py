@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from account.email import send_otp_via_email
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import LoginSerializer, RegisterSerializer  # Assuming RegisterSerializer is the correct serializer
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -18,7 +20,9 @@ class RegisterView(APIView):
                     'message': 'Something went wrong..',
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            serializer.save()
+            user = serializer.save()
+            # user = User.objects.get()
+            send_otp_via_email(user.email)
 
             return Response({
                 'data': {},

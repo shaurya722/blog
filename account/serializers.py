@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 class RegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
+    email = serializers.CharField()
     username = serializers.CharField()
     password = serializers.CharField()
 
@@ -13,6 +14,10 @@ class RegisterSerializer(serializers.Serializer):
 
         if User.objects.filter(username = data['username']).exists():
             raise serializers.ValidationError('username is exists..')
+        
+        if User.objects.filter(email=data['email']).exists():
+          raise serializers.ValidationError('Email already exists.')
+
 
         return data
     
@@ -21,6 +26,7 @@ class RegisterSerializer(serializers.Serializer):
         user = User.objects.create(
         first_name = validated_data['first_name'],
         last_name = validated_data['last_name'],
+        email = validated_data['email'],
         username = validated_data['username']
         )
 
